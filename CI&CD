@@ -1,0 +1,1873 @@
+# CI/CD & DevOps Guide
+
+Project: Developer Intelligence Platform
+
+Version: 1.0
+
+Status: Production Ready
+
+---
+
+# 1. Purpose
+
+This document defines the Continuous Integration (CI), Continuous Deployment (CD), infrastructure automation, quality gates, release process, and DevOps standards for the Developer Intelligence Platform.
+
+Objectives
+
+• Ensure every code change is tested automatically.
+
+• Maintain production stability.
+
+• Reduce deployment time.
+
+• Improve software quality.
+
+• Enable collaborative development.
+
+• Automate repetitive engineering tasks.
+
+---
+
+# 2. DevOps Philosophy
+
+The project follows DevOps principles.
+
+Core Principles
+
+Automation First
+
+Everything possible should be automated.
+
+Infrastructure as Code
+
+Infrastructure should be reproducible.
+
+Continuous Integration
+
+Every commit should be tested.
+
+Continuous Deployment
+
+Deployment should require minimal manual work.
+
+Observability
+
+Systems should expose metrics, logs and traces.
+
+Security by Default
+
+Security checks are integrated into CI.
+
+---
+
+# 3. Repository Workflow
+
+GitHub Repository
+
+│
+
+├── main
+
+├── develop
+
+├── feature/*
+
+├── release/*
+
+└── hotfix/*
+
+Branch Purpose
+
+main
+
+Production
+
+develop
+
+Integration
+
+feature
+
+New features
+
+release
+
+Release preparation
+
+hotfix
+
+Production fixes
+
+---
+
+# 4. Git Workflow
+
+Developer
+
+↓
+
+Create Feature Branch
+
+↓
+
+Develop
+
+↓
+
+Commit
+
+↓
+
+Push
+
+↓
+
+Pull Request
+
+↓
+
+Automated CI
+
+↓
+
+Review
+
+↓
+
+Merge to develop
+
+↓
+
+Release Branch
+
+↓
+
+Production
+
+---
+
+# 5. Conventional Commits
+
+Examples
+
+feat: add repository intelligence engine
+
+fix: resolve GitHub OAuth callback
+
+docs: update architecture diagram
+
+refactor: optimize repository parser
+
+perf: reduce AI latency
+
+test: add recruiter dashboard tests
+
+ci: update deployment workflow
+
+chore: update dependencies
+
+---
+
+# 6. Pull Request Rules
+
+Every PR must
+
+✔ Pass unit tests
+
+✔ Pass integration tests
+
+✔ Pass linting
+
+✔ Pass formatting
+
+✔ Pass security scan
+
+✔ Require approval
+
+✔ Resolve conflicts
+
+✔ Update documentation
+
+---
+
+# 7. CI Pipeline Overview
+
+Developer Push
+
+↓
+
+GitHub Actions
+
+↓
+
+Install Dependencies
+
+↓
+
+Lint
+
+↓
+
+Static Analysis
+
+↓
+
+Unit Tests
+
+↓
+
+Integration Tests
+
+↓
+
+Security Scan
+
+↓
+
+Docker Build
+
+↓
+
+Artifact Upload
+
+↓
+
+Deploy Staging
+
+↓
+
+Smoke Test
+
+↓
+
+Manual Approval
+
+↓
+
+Production Deployment
+
+---
+
+# 8. GitHub Actions Structure
+
+.github/
+
+workflows/
+
+backend.yml
+
+frontend.yml
+
+tests.yml
+
+security.yml
+
+docker.yml
+
+deploy.yml
+
+release.yml
+
+---
+
+# 9. Backend CI Pipeline
+
+Trigger
+
+Push
+
+Pull Request
+
+Workflow
+
+Checkout Repository
+
+↓
+
+Setup Python
+
+↓
+
+Install Dependencies
+
+↓
+
+Cache Packages
+
+↓
+
+Lint
+
+↓
+
+Format Check
+
+↓
+
+Type Check
+
+↓
+
+Unit Tests
+
+↓
+
+Integration Tests
+
+↓
+
+Generate Coverage
+
+↓
+
+Build Docker Image
+
+↓
+
+Upload Artifact
+
+---
+
+# 10. Frontend CI Pipeline
+
+Checkout
+
+↓
+
+Setup Node.js
+
+↓
+
+Install Packages
+
+↓
+
+ESLint
+
+↓
+
+TypeScript Check
+
+↓
+
+Unit Tests
+
+↓
+
+Build Next.js
+
+↓
+
+Lighthouse Audit (optional)
+
+↓
+
+Upload Artifact
+
+---
+
+# 11. Quality Gates
+
+Backend
+
+Black Formatting
+
+Ruff Linting
+
+mypy
+
+pytest
+
+Coverage > 90%
+
+Frontend
+
+ESLint
+
+Prettier
+
+TypeScript
+
+Jest
+
+Playwright
+
+Coverage > 85%
+
+---
+
+# 12. Security Pipeline
+
+Runs Automatically
+
+Dependency Scan
+
+Secret Detection
+
+Container Scan
+
+License Scan
+
+OWASP Dependency Check
+
+SAST Scan
+
+Example Tools
+
+Trivy
+
+CodeQL
+
+Dependabot
+
+GitHub Secret Scanning
+
+---
+
+# 13. Docker Build Pipeline
+
+Checkout
+
+↓
+
+Build Backend Image
+
+↓
+
+Build Frontend Image
+
+↓
+
+Build Worker Image
+
+↓
+
+Tag Images
+
+↓
+
+Push to Container Registry
+
+↓
+
+Deployment Ready
+
+---
+
+# 14. Artifact Management
+
+Artifacts Stored
+
+Coverage Report
+
+Docker Images
+
+Build Logs
+
+API Documentation
+
+OpenAPI Schema
+
+Test Reports
+
+Retention
+
+30 Days
+
+---
+
+# 15. Code Coverage
+
+Target
+
+Backend
+
+90%
+
+Frontend
+
+85%
+
+Workers
+
+90%
+
+Coverage reports generated automatically for every pull request.
+
+---
+
+# 16. Automated Checks
+
+Before Merge
+
+✔ Formatting
+
+✔ Tests
+
+✔ Security
+
+✔ Build
+
+✔ Documentation
+
+✔ Branch Protection
+
+No code reaches main without passing all quality gates.
+
+---
+
+# End of Part 1
+
+# CI/CD & DevOps Guide
+
+Project: Developer Intelligence Platform
+
+Version: 1.0
+
+Part: 2 of 3
+
+---
+
+# 17. Deployment Strategy
+
+The application follows a **Progressive Deployment Model** to reduce risk and ensure reliability.
+
+```
+Developer
+    │
+    ▼
+Feature Branch
+    │
+    ▼
+Pull Request
+    │
+    ▼
+CI Pipeline
+    │
+    ▼
+Develop Branch
+    │
+    ▼
+Deploy → Staging
+    │
+    ▼
+Smoke Tests
+    │
+    ▼
+Manual Approval
+    │
+    ▼
+Main Branch
+    │
+    ▼
+Production Deployment
+```
+
+Deployment Goals:
+
+- Zero downtime
+- Automated rollback
+- Safe releases
+- Fast recovery
+- Observable deployments
+
+---
+
+# 18. Environment Architecture
+
+## Development
+
+Purpose
+
+- Local development
+- Feature testing
+
+Services
+
+- Next.js
+- FastAPI
+- PostgreSQL
+- Redis
+- Celery
+
+Infrastructure
+
+Docker Compose
+
+---
+
+## Staging
+
+Purpose
+
+- QA
+- UAT
+- Performance testing
+
+Infrastructure
+
+Cloud Deployment
+
+Characteristics
+
+- Mirrors production
+- Uses staging API keys
+- Smaller infrastructure
+
+---
+
+## Production
+
+Purpose
+
+Public users
+
+Characteristics
+
+- High availability
+- Auto scaling
+- Monitoring enabled
+- Daily backups
+
+---
+
+# 19. Environment Promotion
+
+```
+Development
+
+↓
+
+Staging
+
+↓
+
+Production
+```
+
+Promotion Requirements
+
+Development → Staging
+
+✔ Tests Passed
+
+✔ Build Successful
+
+✔ Docker Images Built
+
+✔ Security Checks Passed
+
+---
+
+Staging → Production
+
+✔ Smoke Tests Passed
+
+✔ Manual Approval
+
+✔ Database Migration Successful
+
+✔ Health Checks Passed
+
+---
+
+# 20. Infrastructure Overview
+
+```
+                 Internet
+                      │
+              Cloudflare CDN
+                      │
+          ┌───────────┴────────────┐
+          ▼                        ▼
+   Next.js Frontend         FastAPI Backend
+       (Vercel)          (Railway / Fly.io)
+               │
+     ┌─────────┼──────────┐
+     ▼         ▼          ▼
+ PostgreSQL   Redis     Celery Workers
+      │
+      ▼
+ Object Storage (S3 Compatible)
+```
+
+---
+
+# 21. Docker Strategy
+
+Each service is containerized independently.
+
+Containers
+
+Frontend
+
+Backend
+
+Worker
+
+Redis
+
+PostgreSQL (Development Only)
+
+Advantages
+
+- Environment consistency
+- Easy deployment
+- Easy scaling
+- Platform independent
+
+---
+
+# 22. Docker Compose (Development)
+
+Services
+
+frontend
+
+backend
+
+worker
+
+postgres
+
+redis
+
+mailhog (optional)
+
+pgadmin (optional)
+
+Volumes
+
+Database
+
+Redis
+
+Node Modules
+
+Logs
+
+Networks
+
+backend-network
+
+frontend-network
+
+---
+
+# 23. Container Registry
+
+Docker Images
+
+```
+frontend:latest
+
+backend:latest
+
+worker:latest
+```
+
+Version Tags
+
+```
+v1.0.0
+
+v1.1.0
+
+v2.0.0
+```
+
+Registry Options
+
+- GitHub Container Registry (GHCR)
+- Docker Hub
+- AWS ECR
+
+Preferred
+
+GitHub Container Registry
+
+---
+
+# 24. Database Migration Pipeline
+
+Deployment
+
+↓
+
+Backup Database
+
+↓
+
+Run Alembic Migration
+
+↓
+
+Verify Schema
+
+↓
+
+Run Smoke Tests
+
+↓
+
+Deploy Backend
+
+↓
+
+Health Check
+
+↓
+
+Success
+
+If migration fails
+
+↓
+
+Rollback
+
+---
+
+# 25. Secrets Management
+
+Secrets must never be committed to Git.
+
+Development
+
+.env
+
+Ignored via .gitignore
+
+Staging
+
+GitHub Secrets
+
+Production
+
+Cloud Secret Manager
+
+Environment Variables
+
+Examples
+
+DATABASE_URL
+
+REDIS_URL
+
+OPENAI_API_KEY
+
+JWT_SECRET
+
+GITHUB_CLIENT_SECRET
+
+AWS_ACCESS_KEY
+
+AWS_SECRET_KEY
+
+SMTP_PASSWORD
+
+---
+
+# 26. GitHub Actions Deployment Workflow
+
+Trigger
+
+Push to main
+
+↓
+
+Checkout Code
+
+↓
+
+Install Dependencies
+
+↓
+
+Run Tests
+
+↓
+
+Build Docker Images
+
+↓
+
+Push Images
+
+↓
+
+Deploy Backend
+
+↓
+
+Deploy Frontend
+
+↓
+
+Run Database Migration
+
+↓
+
+Run Health Check
+
+↓
+
+Notify Team
+
+---
+
+# 27. Health Checks
+
+Frontend
+
+- Homepage loads
+- API reachable
+
+Backend
+
+- /health endpoint
+- Database connectivity
+- Redis connectivity
+
+Workers
+
+- Queue responsiveness
+- Task execution
+
+Database
+
+- Connection test
+- Migration version
+
+---
+
+# 28. Monitoring Stack
+
+Metrics
+
+Prometheus
+
+Visualization
+
+Grafana
+
+Error Tracking
+
+Sentry
+
+Tracing
+
+OpenTelemetry
+
+Logs
+
+Loki (Optional)
+
+---
+
+# 29. Metrics Dashboard
+
+System Metrics
+
+- CPU
+- Memory
+- Disk
+
+Application Metrics
+
+- API Latency
+- Queue Length
+- AI Response Time
+- Cache Hit Ratio
+- GitHub API Usage
+
+Business Metrics
+
+- Reports Generated
+- Active Users
+- README Downloads
+- Resume Analyses
+- Recruiter Sessions
+
+---
+
+# 30. Alert Rules
+
+Critical
+
+Database Down
+
+Redis Down
+
+Worker Crash
+
+High Error Rate
+
+High CPU
+
+Warning
+
+Queue > 100 Jobs
+
+Slow API (>1s)
+
+Cache Miss Rate > 30%
+
+OpenAI Timeout Spike
+
+GitHub API Rate Limit > 80%
+
+Alerts Delivered To
+
+- Email
+- Slack
+- Microsoft Teams (optional)
+
+---
+
+# 31. Backup Strategy
+
+Database
+
+Daily Backup
+
+Retention
+
+30 Days
+
+Object Storage
+
+Weekly Backup
+
+Retention
+
+90 Days
+
+Configuration
+
+Git Repository
+
+Version Controlled
+
+Secrets
+
+Managed by Cloud Provider
+
+---
+
+# 32. Rollback Strategy
+
+Deployment Failure
+
+↓
+
+Stop Deployment
+
+↓
+
+Restore Previous Container
+
+↓
+
+Restore Database Backup (if needed)
+
+↓
+
+Health Check
+
+↓
+
+Notify Team
+
+Rollback should complete within **10 minutes**.
+
+---
+
+# 33. Release Strategy
+
+Release Types
+
+Major
+
+v2.0.0
+
+Minor
+
+v1.2.0
+
+Patch
+
+v1.2.1
+
+Release Checklist
+
+✔ Tests Passed
+
+✔ Documentation Updated
+
+✔ Changelog Updated
+
+✔ Version Tagged
+
+✔ Docker Images Built
+
+✔ Production Deployment Successful
+
+---
+
+# 34. Disaster Recovery
+
+Failure Scenario
+
+Database Failure
+
+Recovery
+
+Restore Latest Backup
+
+Target RTO
+
+30 Minutes
+
+Target RPO
+
+15 Minutes
+
+---
+
+Failure Scenario
+
+Redis Failure
+
+Recovery
+
+Recreate Instance
+
+---
+
+Failure Scenario
+
+Worker Failure
+
+Recovery
+
+Restart Worker
+
+Replay Queue
+
+---
+
+Failure Scenario
+
+Backend Failure
+
+Recovery
+
+Redeploy Container
+
+---
+
+# 35. Infrastructure Scaling
+
+Current
+
+Single Backend
+
+↓
+
+Future
+
+Multiple Backend Instances
+
+↓
+
+Load Balancer
+
+↓
+
+Auto Scaling
+
+↓
+
+Distributed Workers
+
+↓
+
+Read Replicas
+
+The architecture supports horizontal scaling without major redesign.
+
+---
+
+# End of Part 2
+
+# CI/CD & DevOps Guide
+
+Project: Developer Intelligence Platform
+
+Version: 1.0
+
+Part: 3 of 3
+
+---
+
+# 36. GitHub Actions Architecture
+
+.github/
+
+└── workflows/
+
+    backend.yml
+
+    frontend.yml
+
+    tests.yml
+
+    security.yml
+
+    docker.yml
+
+    deploy-staging.yml
+
+    deploy-production.yml
+
+    release.yml
+
+    dependabot.yml
+
+---
+
+# 37. Workflow Execution
+
+Feature Branch
+
+↓
+
+Backend Tests
+
+↓
+
+Frontend Tests
+
+↓
+
+Security Scan
+
+↓
+
+Docker Build
+
+↓
+
+Pull Request
+
+↓
+
+Approval
+
+↓
+
+Merge
+
+↓
+
+Deploy Staging
+
+↓
+
+Smoke Tests
+
+↓
+
+Production
+
+---
+
+# 38. Backend Workflow
+
+Trigger
+
+Push
+
+Pull Request
+
+Pipeline
+
+Checkout
+
+↓
+
+Python Setup
+
+↓
+
+Cache pip
+
+↓
+
+Install Dependencies
+
+↓
+
+Ruff
+
+↓
+
+Black Check
+
+↓
+
+mypy
+
+↓
+
+pytest
+
+↓
+
+Coverage Report
+
+↓
+
+Docker Build
+
+↓
+
+Artifact Upload
+
+Estimated Runtime
+
+3–5 minutes
+
+---
+
+# 39. Frontend Workflow
+
+Trigger
+
+Push
+
+Pull Request
+
+Pipeline
+
+Checkout
+
+↓
+
+Node.js Setup
+
+↓
+
+npm install
+
+↓
+
+ESLint
+
+↓
+
+TypeScript Check
+
+↓
+
+Jest Tests
+
+↓
+
+Next.js Build
+
+↓
+
+Lighthouse Audit (optional)
+
+↓
+
+Artifact Upload
+
+Estimated Runtime
+
+2–4 minutes
+
+---
+
+# 40. Security Workflow
+
+Runs On
+
+Every Pull Request
+
+Nightly Schedule
+
+Checks
+
+Dependency Vulnerabilities
+
+Secret Detection
+
+Container Scan
+
+Static Analysis
+
+License Compliance
+
+Recommended Tools
+
+GitHub CodeQL
+
+Dependabot
+
+Trivy
+
+Gitleaks
+
+npm audit
+
+pip-audit
+
+---
+
+# 41. Release Workflow
+
+Trigger
+
+Git Tag
+
+Example
+
+v1.0.0
+
+Pipeline
+
+Checkout
+
+↓
+
+Run All Tests
+
+↓
+
+Generate Changelog
+
+↓
+
+Build Docker Images
+
+↓
+
+Push Images
+
+↓
+
+Deploy Production
+
+↓
+
+Notify Team
+
+↓
+
+Create GitHub Release
+
+---
+
+# 42. Branch Protection Rules
+
+Protected Branches
+
+main
+
+develop
+
+Rules
+
+Require Pull Request
+
+Require Review
+
+Require Passing CI
+
+Require Linear History
+
+No Force Push
+
+No Direct Push
+
+Require Conversation Resolution
+
+Dismiss Stale Reviews
+
+---
+
+# 43. Dependabot Configuration
+
+Automatic Updates
+
+Python Packages
+
+Node Packages
+
+GitHub Actions
+
+Docker Images
+
+Schedule
+
+Weekly
+
+Pull Requests Created Automatically
+
+---
+
+# 44. Pre-Commit Hooks
+
+Before Every Commit
+
+Run
+
+Black
+
+Ruff
+
+Prettier
+
+ESLint
+
+TypeScript
+
+Unit Tests (fast subset)
+
+Benefits
+
+Catch issues before CI
+
+Reduce failed builds
+
+Maintain code quality
+
+---
+
+# 45. Versioning Strategy
+
+Semantic Versioning
+
+Major
+
+Breaking Changes
+
+Minor
+
+New Features
+
+Patch
+
+Bug Fixes
+
+Example Timeline
+
+v1.0.0
+
+↓
+
+v1.1.0
+
+↓
+
+v1.1.1
+
+↓
+
+v1.2.0
+
+↓
+
+v2.0.0
+
+---
+
+# 46. Changelog Strategy
+
+Maintain CHANGELOG.md
+
+Categories
+
+Added
+
+Changed
+
+Fixed
+
+Removed
+
+Security
+
+Deprecated
+
+Every release must include an updated changelog.
+
+---
+
+# 47. Code Review Standards
+
+Every review should verify:
+
+✔ Naming conventions
+
+✔ SOLID principles
+
+✔ Readability
+
+✔ Error handling
+
+✔ Logging
+
+✔ Security
+
+✔ Tests
+
+✔ Documentation
+
+✔ Performance
+
+✔ Accessibility (frontend)
+
+---
+
+# 48. Production Readiness Checklist
+
+Infrastructure
+
+✔ HTTPS enabled
+
+✔ Environment variables configured
+
+✔ Secrets stored securely
+
+✔ Database backups enabled
+
+✔ Monitoring active
+
+✔ Alerts configured
+
+Application
+
+✔ API documentation published
+
+✔ Health endpoints available
+
+✔ Rate limiting enabled
+
+✔ Authentication working
+
+✔ Authorization verified
+
+✔ Logging enabled
+
+Quality
+
+✔ Test coverage targets met
+
+✔ Security scan passed
+
+✔ Performance benchmarks achieved
+
+✔ Accessibility reviewed
+
+Deployment
+
+✔ Docker images versioned
+
+✔ Rollback procedure tested
+
+✔ Release tagged
+
+✔ Release notes published
+
+---
+
+# 49. Monitoring Dashboard
+
+System Metrics
+
+- CPU Usage
+- Memory Usage
+- Disk Space
+- Network Throughput
+
+Application Metrics
+
+- Requests per Minute
+- API Response Time
+- Error Rate
+- Queue Length
+- Worker Status
+- AI Processing Time
+
+Business Metrics
+
+- GitHub Profiles Analyzed
+- Reports Generated
+- README Files Created
+- Resume Validations
+- Recruiter Sessions
+- Active Users
+
+---
+
+# 50. Logging Standards
+
+Every log entry should include:
+
+- Timestamp
+- Request ID
+- User ID (if authenticated)
+- Service Name
+- Log Level
+- Message
+- Execution Time
+
+Example Levels
+
+DEBUG
+
+INFO
+
+WARN
+
+ERROR
+
+CRITICAL
+
+Logs should be structured JSON for easier indexing and searching.
+
+---
+
+# 51. Performance Benchmarks
+
+Target Metrics
+
+API Response (cached)
+
+< 200 ms
+
+API Response (uncached)
+
+< 500 ms
+
+GitHub Analysis
+
+< 30 seconds
+
+README Generation
+
+< 10 seconds
+
+Resume Validation
+
+< 20 seconds
+
+Recruiter Ranking (100 candidates)
+
+< 60 seconds
+
+These benchmarks serve as engineering goals for optimization.
+
+---
+
+# 52. Operational Runbooks
+
+Document procedures for:
+
+- Service restart
+- Database restore
+- Worker recovery
+- Cache flush
+- Secret rotation
+- Deployment rollback
+- Incident response
+
+Each runbook should include prerequisites, step-by-step actions, expected outcomes, and verification steps.
+
+---
+
+# 53. Incident Management
+
+Severity Levels
+
+P1 – Complete outage
+
+P2 – Major functionality degraded
+
+P3 – Minor feature issues
+
+P4 – Cosmetic/UI issues
+
+Response Targets
+
+P1: Immediate
+
+P2: Within 1 hour
+
+P3: Same business day
+
+P4: Next planned sprint
+
+---
+
+# 54. Documentation Requirements
+
+Every service must contain:
+
+README.md
+
+Architecture Overview
+
+Setup Instructions
+
+Environment Variables
+
+API Reference
+
+Testing Guide
+
+Deployment Instructions
+
+Troubleshooting Guide
+
+---
+
+# 55. Submission Checklist (Academic)
+
+✔ Source code committed
+
+✔ Documentation complete
+
+✔ PRD included
+
+✔ TRD included
+
+✔ Architecture Design Document included
+
+✔ Roadmap included
+
+✔ CI/CD Guide included
+
+✔ API Documentation generated
+
+✔ Database schema documented
+
+✔ Test report prepared
+
+✔ Deployment demonstrated
+
+✔ Presentation ready
+
+✔ Demo video recorded (optional)
+
+---
+
+# 56. Conclusion
+
+The CI/CD and DevOps strategy establishes a reliable engineering workflow for the Developer Intelligence Platform. Automated testing, security scanning, containerized deployments, structured release management, and production monitoring ensure that the application can evolve safely from a final-year project into a maintainable, production-ready SaaS platform.
+
+The focus is not only on delivering features but also on building software that is secure, observable, scalable, and continuously deployable.

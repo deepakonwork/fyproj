@@ -1,0 +1,372 @@
+25. API Architecture
+25.1 API Design Philosophy
+
+The platform follows an API-First Architecture, ensuring all frontend interactions occur through versioned REST APIs. Every endpoint is designed to be:
+
+Stateless
+Idempotent (where applicable)
+Secure
+Versioned
+Documented using OpenAPI (Swagger)
+25.2 API Standards
+
+Base URL
+
+/api/v1
+Response Format
+{
+  "success": true,
+  "message": "Analysis completed successfully.",
+  "data": {},
+  "metadata": {
+    "requestId": "req_12345",
+    "executionTime": "12.4s"
+  }
+}
+Error Format
+{
+  "success": false,
+  "error": {
+    "code": "GITHUB_RATE_LIMIT",
+    "message": "GitHub API rate limit exceeded."
+  }
+}
+26. API Modules
+Authentication
+Method	Endpoint	Description
+POST	/auth/login	Login
+GET	/auth/github	GitHub OAuth
+GET	/auth/google	Google OAuth
+POST	/auth/logout	Logout
+GET	/auth/profile	Current user
+GitHub Analysis
+Method	Endpoint
+POST	/analysis/github
+GET	/analysis/{id}
+GET	/analysis/history
+DELETE	/analysis/{id}
+README Generator
+Method	Endpoint
+POST	/readme/generate
+POST	/readme/improve
+GET	/readme/templates
+Resume Engine
+Method	Endpoint
+POST	/resume/upload
+POST	/resume/validate
+GET	/resume/report/{id}
+Recruiter APIs
+Method	Endpoint
+POST	/recruiter/upload
+GET	/recruiter/candidates
+GET	/recruiter/report/{id}
+POST	/recruiter/filter
+27. Database Architecture
+Database Selection
+Component	Technology
+Relational Data	PostgreSQL
+Cache	Redis
+Blob Storage	S3 Compatible Storage
+Database Design Principles
+Normalize transactional data
+Denormalize analytics where needed
+UUID primary keys
+Soft delete strategy
+Audit timestamps
+Optimized indexing
+28. Entity Relationship Overview
+User
+ │
+ ├── GitHubProfile
+ │        │
+ │        ├── Repository
+ │        │       │
+ │        │       ├── Analysis
+ │        │       ├── SkillEvidence
+ │        │       └── ReadmeReport
+ │        │
+ │        └── CareerReport
+ │
+ ├── Resume
+ │        │
+ │        └── ResumeValidation
+ │
+ └── RecruiterWorkspace
+          │
+          └── CandidateRanking
+29. Core Tables
+Users
+Column	Type
+id	UUID
+email	VARCHAR
+name	VARCHAR
+role	ENUM
+created_at	TIMESTAMP
+GitHub Profiles
+Column	Type
+id	UUID
+user_id	UUID
+username	VARCHAR
+bio	TEXT
+followers	INTEGER
+following	INTEGER
+profile_snapshot	JSONB
+Repositories
+Column	Type
+id	UUID
+github_profile_id	UUID
+repository_name	VARCHAR
+language	VARCHAR
+metadata	JSONB
+readme	TEXT
+last_analyzed	TIMESTAMP
+Analysis Reports
+Column	Type
+id	UUID
+repository_id	UUID
+engineering_score	DECIMAL
+report	JSONB
+ai_version	VARCHAR
+created_at	TIMESTAMP
+Skills
+Column	Type
+id	UUID
+analysis_id	UUID
+skill	VARCHAR
+confidence	DECIMAL
+evidence	JSONB
+Resume Reports
+Column	Type
+id	UUID
+user_id	UUID
+extracted_data	JSONB
+validation_score	DECIMAL
+30. Redis Strategy
+
+Redis is used for:
+
+Session storage
+JWT blacklist
+GitHub API cache
+AI response cache
+Background job queue
+Rate limiting counters
+Cache TTL
+Item	TTL
+GitHub Profile	1 hour
+Repository Metadata	6 hours
+AI Report	24 hours
+README Output	24 hours
+Market Trends	12 hours
+31. Background Job Architecture
+
+Long-running tasks should never block HTTP requests.
+
+Background Jobs
+GitHub Fetch
+Repository Parsing
+AI Analysis
+README Generation
+Resume Parsing
+Candidate Ranking
+Notification Delivery
+Queue Flow
+API Request
+     │
+     ▼
+Job Created
+     │
+     ▼
+Redis Queue
+     │
+     ▼
+Celery Worker
+     │
+     ▼
+AI Processing
+     │
+     ▼
+Database
+     │
+     ▼
+Frontend Notification
+32. Worker Types
+GitHub Worker
+
+Responsibilities:
+
+Fetch repositories
+Refresh metadata
+Handle API retries
+AI Worker
+
+Responsibilities:
+
+Generate engineering reports
+Skill extraction
+Career recommendations
+Resume Worker
+
+Responsibilities:
+
+OCR (if required)
+Resume parsing
+Validation
+Notification Worker
+
+Responsibilities:
+
+Email
+In-app notifications
+Webhooks
+33. Security Architecture
+Authentication
+GitHub OAuth
+Google OAuth
+JWT Access Tokens
+Refresh Tokens
+Authorization
+
+RBAC (Role-Based Access Control)
+
+Roles:
+
+User
+Recruiter
+Admin
+Encryption
+HTTPS
+TLS 1.3
+AES-256 for sensitive stored tokens
+Password hashing (Argon2 or bcrypt if local auth is added)
+Secrets Management
+
+Never store secrets in source code.
+
+Use:
+
+GitHub Secrets
+Environment Variables
+Cloud Secret Manager (production)
+34. Rate Limiting
+
+Purpose:
+
+Prevent abuse
+Protect APIs
+Respect GitHub API limits
+
+Example Rules:
+
+Endpoint	Limit
+Login	5/min
+Analysis	20/hour
+README	30/hour
+Resume Upload	10/hour
+35. Logging Strategy
+
+All services should produce structured JSON logs.
+
+Example fields:
+
+Timestamp
+Service
+Request ID
+User ID
+Log Level
+Duration
+Error Code
+
+Log Levels:
+
+DEBUG
+INFO
+WARN
+ERROR
+CRITICAL
+36. Monitoring & Observability
+Metrics
+
+Track:
+
+API latency
+AI execution time
+Queue length
+Cache hit ratio
+GitHub API failures
+Error rates
+Tools
+Tool	Purpose
+Prometheus	Metrics
+Grafana	Dashboards
+Sentry	Error Tracking
+OpenTelemetry	Tracing
+37. Error Handling Strategy
+
+Errors are categorized as:
+
+Client Errors
+Invalid GitHub URL
+Unsupported resume format
+Missing authentication
+External Errors
+GitHub API unavailable
+OpenAI timeout
+Storage failure
+Internal Errors
+Database failure
+Queue failure
+Worker crash
+Retry Policy
+Operation	Retries
+GitHub Fetch	3
+AI Request	2
+Resume Parse	2
+File Upload	3
+
+Use exponential backoff for retries.
+
+38. Performance Optimization
+Techniques
+Database indexing
+Redis caching
+Async processing
+Lazy loading
+Pagination
+Compression (Gzip/Brotli)
+CDN for static assets
+Database Optimization
+Composite indexes
+Query optimization
+Connection pooling
+Read replicas (future)
+AI Cost Optimization
+Cache repeated analyses
+Chunk repository data
+Use lightweight models for preprocessing
+Re-analyze only changed repositories
+39. Data Retention Policy
+Data	Retention
+Analysis Reports	1 year
+Uploaded Resumes	90 days (configurable)
+Logs	30 days
+Metrics	180 days
+
+Users can delete their data, triggering cleanup jobs to comply with privacy expectations.
+
+End of Part 3
+
+Part 4 will complete the TRD with:
+
+Deployment Architecture
+CI/CD Integration
+Infrastructure as Code
+Environment Configuration
+Folder Structure (Monorepo)
+Testing Strategy
+Disaster Recovery
+Scalability Roadmap
+Risk Analysis
+Future Architecture Evolution
+Engineering Decision Log
+Appendix (Glossary & Standards)

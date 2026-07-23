@@ -1,0 +1,358 @@
+1. Executive Summary
+1.1 Purpose
+
+The Technical Requirements Document (TRD) defines the complete technical architecture, engineering decisions, technology stack, software components, infrastructure, security considerations, and implementation guidelines for the Developer Intelligence Platform.
+
+Unlike conventional GitHub analytics tools that report repository statistics, this platform leverages AI to infer engineering capability, learning progression, portfolio quality, and recruiter-relevant insights from GitHub repositories and resumes.
+
+The TRD acts as the engineering blueprint for implementation and serves as the single source of truth for system design decisions.
+
+2. Product Overview
+Vision
+
+Build an AI platform capable of understanding developers instead of repositories.
+
+Instead of reporting:
+
+Number of commits
+Stars
+Forks
+Followers
+
+The platform should answer:
+
+What kind of engineer is this?
+What technologies does this person actually understand?
+How has this developer evolved?
+Are their projects production-ready?
+Which engineering practices do they follow?
+What skills are missing for their target career?
+3. Technical Goals
+Primary Goals
+Modular architecture
+Cloud-native deployment
+AI-first design
+Scalable services
+API-first architecture
+Secure authentication
+Low operational cost
+Extensible AI engine
+Performance Goals
+Metric	Target
+Profile Analysis	< 30 sec
+README Generation	< 10 sec
+Resume Parsing	< 15 sec
+API Response	< 300 ms
+Availability	99.9%
+Concurrent Users	10,000+
+Scalability Goals
+
+The platform must support:
+
+Millions of repositories
+Thousands of concurrent analyses
+Background processing
+Horizontal scaling
+Independent AI workers
+4. Technology Stack
+Frontend
+Technology	Purpose
+Next.js	SSR & App Router
+React	UI
+TypeScript	Type Safety
+Tailwind CSS	Styling
+shadcn/ui	Component Library
+Framer Motion	Animations
+React Query	Data Fetching
+Zustand	Client State
+Recharts	Charts
+Why Next.js?
+Server Components
+Better SEO
+Fast Routing
+Optimized Performance
+Built-in API support
+Backend
+Technology	Purpose
+FastAPI	Main Backend
+Python	AI Integration
+SQLAlchemy	ORM
+Pydantic	Validation
+Celery	Background Jobs
+Redis	Queue + Cache
+Why FastAPI?
+Extremely fast
+Automatic Swagger docs
+Async support
+Excellent AI ecosystem
+Easy validation
+Database
+Technology	Purpose
+PostgreSQL	Primary Database
+Redis	Cache
+S3-compatible Storage	File Storage
+AI Layer
+Technology	Purpose
+OpenAI GPT	Intelligence Engine
+Embeddings	Semantic Search
+Vector Database (optional)	Repository Knowledge
+Infrastructure
+Technology	Purpose
+Docker	Containers
+Docker Compose	Local Development
+GitHub Actions	CI/CD
+Vercel	Frontend
+Railway / Render	Backend
+Cloudflare	CDN
+5. High-Level Architecture
+                    ┌──────────────────────────────┐
+                    │          Frontend            │
+                    │     Next.js + React          │
+                    └──────────────┬───────────────┘
+                                   │ HTTPS
+                                   ▼
+                    ┌──────────────────────────────┐
+                    │        API Gateway           │
+                    │ Authentication & Routing     │
+                    └──────────────┬───────────────┘
+                                   │
+          ┌────────────────────────┼─────────────────────────┐
+          ▼                        ▼                         ▼
+ GitHub Service           Resume Service             Recruiter Service
+          │                        │                         │
+          └──────────────┬─────────┴──────────────┬──────────┘
+                         ▼                        ▼
+                  AI Orchestrator         Background Queue
+                         │                        │
+                         ▼                        ▼
+                 AI Intelligence Engine     Celery Workers
+                         │
+                         ▼
+                PostgreSQL + Redis + Storage
+6. System Components
+
+The platform is divided into independent services.
+
+Components
+Frontend
+Authentication Service
+GitHub Service
+Resume Service
+AI Orchestrator
+Repository Analysis Engine
+Career Intelligence Engine
+README Generator
+Recruiter Engine
+Notification Service
+Background Workers
+Analytics Service
+
+Each component has a single responsibility and communicates through REST APIs and asynchronous jobs where appropriate.
+
+7. Frontend Architecture
+Folder Structure
+frontend/
+├── app/
+│   ├── dashboard/
+│   ├── profile/
+│   ├── recruiter/
+│   ├── settings/
+│   └── auth/
+│
+├── components/
+│   ├── ui/
+│   ├── charts/
+│   ├── dashboard/
+│   ├── github/
+│   └── recruiter/
+│
+├── hooks/
+├── services/
+├── lib/
+├── utils/
+├── types/
+├── styles/
+└── public/
+Responsibilities
+Authentication
+Dashboard
+Reports
+Charts
+Profile pages
+Resume upload
+Recruiter portal
+Settings
+Notifications
+8. Backend Architecture
+Folder Structure
+backend/
+├── api/
+│   ├── auth/
+│   ├── github/
+│   ├── analysis/
+│   ├── recruiter/
+│   ├── resume/
+│   ├── readme/
+│   └── admin/
+│
+├── services/
+├── ai/
+├── workers/
+├── repositories/
+├── database/
+├── models/
+├── schemas/
+├── middleware/
+├── core/
+├── utils/
+└── tests/
+Layered Architecture
+API Layer
+     │
+Service Layer
+     │
+Business Logic
+     │
+Repository Layer
+     │
+Database
+
+This separation ensures maintainability, easier testing, and clean dependency boundaries.
+
+9. Authentication & Authorization
+Supported Providers
+GitHub OAuth
+Google OAuth
+Email (future)
+Authentication Flow
+User
+  │
+  ▼
+Frontend
+  │
+OAuth Request
+  │
+GitHub
+  │
+Access Token
+  │
+Backend
+  │
+JWT Issued
+  │
+Dashboard
+Roles
+Role	Permissions
+User	Analyze own profile, generate reports
+Recruiter	Upload resumes, rank candidates
+Admin	Manage users, monitor jobs
+Security Measures
+JWT access tokens
+Refresh tokens
+HTTPS only
+CSRF protection
+Rate limiting
+Secure cookie storage
+OAuth token encryption
+10. GitHub Integration Service
+Responsibilities
+
+The GitHub Service is responsible for collecting all repository and profile metadata required for AI analysis.
+
+Data Collected
+Profile
+Username
+Bio
+Followers
+Following
+Organizations
+Public repositories
+Location (if public)
+Website
+Social links
+Repository Metadata
+Name
+Description
+Topics
+Languages
+License
+Visibility
+Created date
+Updated date
+Default branch
+Repository Content
+README
+Folder structure
+Package files
+Configuration files
+GitHub Actions workflows
+Dockerfiles
+License files
+Development Signals
+Commit history
+Pull requests
+Issues
+Releases
+Branches
+Tags
+Contributors
+GitHub APIs Used
+REST API
+
+Used for:
+
+Repository metadata
+Commits
+Issues
+Releases
+Pull requests
+GraphQL API
+
+Used for:
+
+Efficient profile queries
+Repository relationships
+Contribution data
+Organization information
+Data Ingestion Workflow
+GitHub Username
+        │
+        ▼
+Validate Profile
+        │
+        ▼
+Fetch Metadata
+        │
+        ▼
+Fetch Repositories
+        │
+        ▼
+Fetch Repository Content
+        │
+        ▼
+Normalize Data
+        │
+        ▼
+Store Raw Snapshot
+        │
+        ▼
+Send Analysis Job to Queue
+11. Data Normalization
+
+Before any AI processing, all incoming GitHub data is normalized into a consistent internal schema.
+
+Example normalized repository object:
+
+{
+  "repository_id": "uuid",
+  "name": "portfolio",
+  "language": "TypeScript",
+  "topics": ["react", "nextjs"],
+  "readme": "...",
+  "stars": 12,
+  "license": "MIT",
+  "has_docker": true,
+  "has_tests": false,
+  "deployment_detected": true,
+  "last_updated": "2026-07-12"
+}

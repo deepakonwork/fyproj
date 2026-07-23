@@ -1,0 +1,732 @@
+# Architecture Design Document (ADD)
+
+Project: Developer Intelligence Platform
+
+Version: 1.0
+
+Status: Draft
+
+Owner: Engineering Team
+
+---
+
+# 1. Purpose
+
+This document describes the software architecture of the Developer Intelligence Platform.
+
+The purpose of this document is to:
+
+• Explain the architecture
+
+• Define system boundaries
+
+• Describe software components
+
+• Explain communication between services
+
+• Guide implementation
+
+• Ensure scalability
+
+• Maintain consistency
+
+---
+
+# 2. Architecture Principles
+
+The architecture follows several engineering principles.
+
+## AI First
+
+Artificial Intelligence is treated as a core service rather than an optional feature.
+
+Every major feature is powered by AI.
+
+---
+
+## API First
+
+Every feature must expose REST APIs.
+
+The frontend communicates exclusively through APIs.
+
+No direct database access is allowed.
+
+---
+
+## Modular Design
+
+Each module owns a single responsibility.
+
+Modules communicate using APIs or queues.
+
+---
+
+## Cloud Native
+
+The platform is designed to run inside containers.
+
+No component depends on local infrastructure.
+
+---
+
+## Event Driven
+
+Long-running jobs never execute inside HTTP requests.
+
+Heavy processing is delegated to background workers.
+
+---
+
+## Scalable
+
+Every service should scale independently.
+
+Frontend
+
+Backend
+
+Workers
+
+Database
+
+Cache
+
+should all be independently scalable.
+
+---
+
+# 3. Architectural Goals
+
+The architecture should satisfy the following goals.
+
+Performance
+
+Fast response time
+
+Scalability
+
+Support thousands of analyses
+
+Availability
+
+99.9%
+
+Reliability
+
+Fault tolerant
+
+Security
+
+OAuth
+
+JWT
+
+Encryption
+
+Maintainability
+
+Easy to extend
+
+Observability
+
+Logging
+
+Tracing
+
+Monitoring
+
+---
+
+# 4. Architectural Style
+
+The platform follows a Hybrid Architecture.
+
+Combining
+
+Layered Architecture
+
++
+
+Service Oriented Architecture
+
++
+
+Event Driven Processing
+
++
+
+AI Orchestration
+
+Why?
+
+Layered Architecture
+
+Simplifies business logic.
+
+Service Oriented
+
+Allows future microservices.
+
+Event Driven
+
+Moves heavy work to queues.
+
+AI Orchestration
+
+Allows multiple AI agents.
+
+---
+
+# 5. C4 Model
+
+The project follows the C4 Architecture Model.
+
+Level 1
+
+System Context
+
+Level 2
+
+Container
+
+Level 3
+
+Component
+
+Level 4
+
+Code
+
+This document covers the first three levels.
+
+---
+
+# 6. Level 1 — System Context Diagram
+
+                     +----------------------+
+                     |      Developer       |
+                     +----------+-----------+
+                                |
+                                |
+                                v
+                  +-----------------------------+
+                  | Developer Intelligence App  |
+                  +-----------------------------+
+                     ^      ^         ^
+                     |      |         |
+                     |      |         |
+             GitHub API   OpenAI   Resume Upload
+
+External Systems
+
+GitHub
+
+Provides repositories
+
+OpenAI
+
+Provides reasoning
+
+Object Storage
+
+Stores uploaded files
+
+Email Service
+
+Sends notifications
+
+---
+
+# Actors
+
+Developer
+
+Analyzes own profile
+
+Recruiter
+
+Ranks candidates
+
+Admin
+
+Manages platform
+
+External Services
+
+GitHub
+
+OpenAI
+
+Email Provider
+
+Cloud Storage
+
+---
+
+# Responsibilities
+
+Developer
+
+Generate reports
+
+Improve GitHub
+
+Generate README
+
+Recruiter
+
+Upload resumes
+
+Analyze GitHub
+
+Shortlist candidates
+
+Admin
+
+Monitor workers
+
+Manage users
+
+Analytics
+
+---
+
+# 7. Functional Boundaries
+
+The platform does NOT
+
+Host source code
+
+Replace GitHub
+
+Replace ATS
+
+Replace HR
+
+The platform DOES
+
+Understand engineering quality
+
+Generate recommendations
+
+Evaluate portfolios
+
+Produce recruiter insights
+
+---
+
+# 8. Level 2 — Container Diagram
+
+                   Browser
+                      │
+                      │
+              Next.js Frontend
+                      │
+            HTTPS REST API
+                      │
+               API Gateway
+                      │
+      ┌───────────────┼────────────────┐
+      │               │                │
+      ▼               ▼                ▼
+ GitHub Service  Resume Service   Recruiter Service
+      │               │                │
+      └───────────────┼────────────────┘
+                      ▼
+               AI Orchestrator
+                      │
+      ┌───────────────┼─────────────────────┐
+      ▼               ▼                     ▼
+ Repository AI   Career AI          README AI
+                      │
+                      ▼
+              PostgreSQL Database
+                      │
+                      ▼
+                  Redis Cache
+                      │
+                      ▼
+               Celery Workers
+
+---
+
+# Container Responsibilities
+
+Frontend
+
+UI
+
+Dashboard
+
+Authentication
+
+Charts
+
+Reports
+
+Backend
+
+Authentication
+
+Business Logic
+
+Validation
+
+AI Coordination
+
+Workers
+
+Heavy Tasks
+
+GitHub Fetch
+
+Resume Parsing
+
+AI Analysis
+
+Database
+
+Persistent storage
+
+Redis
+
+Caching
+
+Queue
+
+Sessions
+
+---
+
+# 9. Communication Protocols
+
+Frontend
+
+↓
+
+Backend
+
+REST
+
+HTTPS
+
+Backend
+
+↓
+
+GitHub
+
+REST
+
+GraphQL
+
+Backend
+
+↓
+
+OpenAI
+
+HTTPS
+
+Backend
+
+↓
+
+Redis
+
+TCP
+
+Workers
+
+↓
+
+Database
+
+SQL
+
+---
+
+# Why REST?
+
+Easy integration
+
+Simple testing
+
+Swagger support
+
+Widely adopted
+
+Future mobile compatibility
+
+---
+
+# 10. High-Level Request Lifecycle
+
+Developer opens dashboard
+
+↓
+
+Authentication
+
+↓
+
+GitHub profile submitted
+
+↓
+
+Backend validates request
+
+↓
+
+GitHub Service collects repositories
+
+↓
+
+Repository metadata normalized
+
+↓
+
+Background analysis started
+
+↓
+
+AI engines execute
+
+↓
+
+Engineering report generated
+
+↓
+
+Stored in PostgreSQL
+
+↓
+
+Frontend displays report
+
+---
+
+# 11. Module Overview
+
+Module
+
+Authentication
+
+Responsibility
+
+Login
+
+JWT
+
+OAuth
+
+----------------------------
+
+Module
+
+GitHub Service
+
+Responsibility
+
+Repository fetching
+
+Metadata extraction
+
+----------------------------
+
+Module
+
+Repository Intelligence
+
+Responsibility
+
+Repository understanding
+
+----------------------------
+
+Module
+
+Engineering Intelligence
+
+Responsibility
+
+Developer evaluation
+
+----------------------------
+
+Module
+
+Career Intelligence
+
+Responsibility
+
+Learning roadmap
+
+----------------------------
+
+Module
+
+README Engine
+
+Responsibility
+
+Generate README
+
+----------------------------
+
+Module
+
+Recruiter Engine
+
+Responsibility
+
+Candidate ranking
+
+----------------------------
+
+Module
+
+Notification Service
+
+Responsibility
+
+Emails
+
+Status updates
+
+---
+
+# 12. Data Flow Overview
+
+GitHub
+
+↓
+
+GitHub Service
+
+↓
+
+Raw Repository Data
+
+↓
+
+Normalizer
+
+↓
+
+Feature Extractor
+
+↓
+
+AI Orchestrator
+
+↓
+
+Specialized AI Engines
+
+↓
+
+Merged Intelligence
+
+↓
+
+Database
+
+↓
+
+Dashboard
+
+---
+
+# 13. Design Decisions
+
+Decision
+
+FastAPI
+
+Reason
+
+Async performance
+
+AI ecosystem
+
+--------------------------------
+
+Decision
+
+Next.js
+
+Reason
+
+SEO
+
+Performance
+
+SSR
+
+--------------------------------
+
+Decision
+
+Redis
+
+Reason
+
+Queue
+
+Cache
+
+Sessions
+
+--------------------------------
+
+Decision
+
+Celery
+
+Reason
+
+Background processing
+
+--------------------------------
+
+Decision
+
+PostgreSQL
+
+Reason
+
+Structured relational data
+
+JSON support
+
+--------------------------------
+
+Decision
+
+OpenAI
+
+Reason
+
+Advanced reasoning
+
+Natural language generation
+
+--------------------------------
+
+Decision
+
+Docker
+
+Reason
+
+Consistent deployments
+
+Environment parity
+
+---
+
+# 14. Summary
+
+This architecture establishes a modular, cloud-native foundation for the Developer Intelligence Platform. By separating concerns across frontend, backend, AI orchestration, and asynchronous workers, the system remains scalable, maintainable, and ready for future expansion into enterprise hiring, educational analytics, and developer intelligence products.

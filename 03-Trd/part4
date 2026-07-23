@@ -1,0 +1,905 @@
+# docs/03_TRD.md (Part 4)
+
+Developer Intelligence Platform
+Technical Requirements Document
+
+Version: 1.0
+Part: 4 of 4
+
+---
+
+# 40. Deployment Architecture
+
+## Deployment Strategy
+
+The application follows a cloud-native architecture with independently deployable services.
+
+                Internet
+                     │
+          Cloudflare CDN + WAF
+                     │
+      ┌──────────────┴──────────────┐
+      │                             │
+      ▼                             ▼
+ Next.js Frontend              FastAPI Backend
+     (Vercel)                (Railway / Fly.io)
+                                      │
+          ┌───────────────────────────┼─────────────────────────────┐
+          ▼                           ▼                             ▼
+    PostgreSQL                  Redis Cache                  AI Workers
+      (Neon)                     (Upstash)               (Celery + Redis)
+                                                              │
+                                                              ▼
+                                                      OpenAI API
+
+---
+
+# Deployment Environments
+
+Development
+
+Purpose
+
+Developer testing
+
+Infrastructure
+
+Docker Compose
+
+Database
+
+Local PostgreSQL
+
+Redis
+
+Local Redis
+
+---
+
+Testing
+
+Purpose
+
+QA
+
+Database
+
+Shared
+
+AI
+
+Sandbox API Key
+
+---
+
+Staging
+
+Purpose
+
+Pre-production
+
+Production-like environment
+
+Smoke testing
+
+---
+
+Production
+
+Purpose
+
+Public
+
+Auto scaling
+
+Monitoring enabled
+
+Backups enabled
+
+---
+
+# Infrastructure Components
+
+Frontend
+
+Next.js
+
+Backend
+
+FastAPI
+
+Workers
+
+Celery
+
+Queue
+
+Redis
+
+Storage
+
+S3 Compatible
+
+Database
+
+PostgreSQL
+
+Monitoring
+
+Grafana
+
+Metrics
+
+Prometheus
+
+Tracing
+
+OpenTelemetry
+
+Errors
+
+Sentry
+
+---
+
+# Environment Variables
+
+Frontend
+
+NEXT_PUBLIC_API_URL
+
+NEXT_PUBLIC_GITHUB_CLIENT_ID
+
+NEXT_PUBLIC_ENVIRONMENT
+
+Backend
+
+DATABASE_URL
+
+REDIS_URL
+
+OPENAI_API_KEY
+
+JWT_SECRET
+
+GITHUB_CLIENT_SECRET
+
+AWS_ACCESS_KEY
+
+AWS_SECRET_KEY
+
+EMAIL_PROVIDER_KEY
+
+Every secret must be managed through GitHub Secrets during CI/CD and cloud secret managers in production.
+
+---
+
+# Configuration Management
+
+Configuration priority:
+
+Environment Variables
+
+↓
+
+Secret Manager
+
+↓
+
+Configuration Files
+
+↓
+
+Default Values
+
+No sensitive values should be committed to Git.
+
+---
+
+# CI/CD Strategy
+
+Source Control
+
+↓
+
+GitHub
+
+↓
+
+GitHub Actions
+
+↓
+
+Lint
+
+↓
+
+Unit Tests
+
+↓
+
+Integration Tests
+
+↓
+
+Security Scan
+
+↓
+
+Docker Build
+
+↓
+
+Push Image
+
+↓
+
+Deploy Staging
+
+↓
+
+Smoke Tests
+
+↓
+
+Manual Approval
+
+↓
+
+Production Deployment
+
+---
+
+# Branch Strategy
+
+main
+
+Production-ready code
+
+develop
+
+Integration branch
+
+feature/*
+
+Feature development
+
+hotfix/*
+
+Production fixes
+
+release/*
+
+Release preparation
+
+---
+
+# Pull Request Rules
+
+Every PR must:
+
+Pass tests
+
+Pass lint
+
+Pass formatting
+
+Require one approval
+
+Pass security scan
+
+No direct commits to main
+
+---
+
+# Docker Strategy
+
+Each service owns its own Dockerfile.
+
+frontend/
+
+Dockerfile
+
+backend/
+
+Dockerfile
+
+worker/
+
+Dockerfile
+
+docker-compose.yml
+
+supports local development.
+
+---
+
+# Infrastructure as Code
+
+Future versions should provision infrastructure using Terraform.
+
+Resources
+
+Database
+
+Redis
+
+Storage
+
+Networking
+
+DNS
+
+Secrets
+
+Load Balancer
+
+---
+
+# Monitoring Strategy
+
+Application Metrics
+
+CPU
+
+RAM
+
+API latency
+
+Queue size
+
+Background jobs
+
+Database latency
+
+Redis usage
+
+GitHub API usage
+
+OpenAI token usage
+
+Analysis duration
+
+---
+
+# Alert Rules
+
+High CPU
+
+Queue backlog
+
+Database unavailable
+
+Worker failure
+
+API error rate > 5%
+
+OpenAI timeout spike
+
+GitHub rate limit exceeded
+
+---
+
+# Backup Strategy
+
+Database
+
+Daily snapshot
+
+Retention
+
+30 days
+
+Storage
+
+Weekly backup
+
+Configuration
+
+Git repository
+
+Versioned
+
+Secrets
+
+Cloud Secret Manager
+
+---
+
+# Disaster Recovery
+
+Failure
+
+Database
+
+Recovery
+
+Restore snapshot
+
+Target
+
+<30 min
+
+---
+
+Failure
+
+Redis
+
+Recovery
+
+Automatic recreation
+
+---
+
+Failure
+
+Worker
+
+Recovery
+
+Restart
+
+Replay queue
+
+---
+
+Failure
+
+Frontend
+
+Recovery
+
+Redeploy
+
+---
+
+Failure
+
+Backend
+
+Recovery
+
+Container replacement
+
+---
+
+# Testing Strategy
+
+Testing Pyramid
+
+                E2E
+              Integration
+             Unit Testing
+
+---
+
+Unit Testing
+
+Target
+
+Business Logic
+
+Coverage Goal
+
+90%
+
+Framework
+
+pytest
+
+---
+
+Integration Testing
+
+Target
+
+API
+
+Database
+
+Workers
+
+Authentication
+
+GitHub
+
+---
+
+End-to-End
+
+Framework
+
+Playwright
+
+Scenarios
+
+Authentication
+
+GitHub Analysis
+
+README Generation
+
+Resume Upload
+
+Recruiter Dashboard
+
+---
+
+Performance Testing
+
+Tool
+
+k6
+
+Scenarios
+
+100 concurrent users
+
+500 concurrent users
+
+1000 concurrent users
+
+---
+
+Security Testing
+
+OWASP Top 10
+
+Dependency scanning
+
+Container scanning
+
+Secret scanning
+
+JWT validation
+
+Rate limiting
+
+OAuth validation
+
+---
+
+Folder Structure
+
+developer-intelligence-platform/
+
+docs/
+
+frontend/
+
+backend/
+
+worker/
+
+shared/
+
+infrastructure/
+
+docker/
+
+.github/
+
+scripts/
+
+database/
+
+monitoring/
+
+tests/
+
+README.md
+
+---
+
+Coding Standards
+
+Language
+
+Python
+
+Formatter
+
+Black
+
+Linter
+
+Ruff
+
+Type Checker
+
+mypy
+
+---
+
+Language
+
+TypeScript
+
+Formatter
+
+Prettier
+
+Linter
+
+ESLint
+
+---
+
+Documentation Standards
+
+Every service must contain
+
+README
+
+Architecture
+
+API
+
+Environment Variables
+
+Deployment
+
+Testing
+
+Contributing
+
+---
+
+Versioning Strategy
+
+Semantic Versioning
+
+Major
+
+Breaking Changes
+
+Minor
+
+Features
+
+Patch
+
+Bug Fixes
+
+Example
+
+v1.4.2
+
+---
+
+Engineering Principles
+
+SOLID
+
+Clean Architecture
+
+DRY
+
+KISS
+
+YAGNI
+
+API First
+
+AI First
+
+Security First
+
+Test Driven where practical
+
+---
+
+Scalability Roadmap
+
+Phase 1
+
+Single Backend
+
+Single Database
+
+---
+
+Phase 2
+
+Separate AI Workers
+
+Redis Queue
+
+---
+
+Phase 3
+
+Microservices
+
+Repository Service
+
+Recruiter Service
+
+Career Service
+
+README Service
+
+---
+
+Phase 4
+
+Multi-region deployment
+
+CDN
+
+Auto Scaling
+
+Vector Database
+
+AI Agent Architecture
+
+---
+
+Known Technical Risks
+
+GitHub Rate Limits
+
+Mitigation
+
+Caching
+
+---
+
+Large repositories
+
+Mitigation
+
+Incremental analysis
+
+---
+
+AI Cost
+
+Mitigation
+
+Prompt optimization
+
+Caching
+
+---
+
+Resume parsing inaccuracies
+
+Mitigation
+
+Confidence scores
+
+Human verification
+
+---
+
+Future Architecture
+
+Repository Knowledge Graph
+
+AI Memory
+
+Engineering Benchmark Engine
+
+Company Skill Graph
+
+Developer Ranking Engine
+
+Interview Simulation
+
+Browser Extension
+
+VS Code Extension
+
+GitLab Integration
+
+Bitbucket Integration
+
+---
+
+Engineering Decision Log
+
+Decision
+
+FastAPI
+
+Reason
+
+Excellent async support and AI ecosystem
+
+---
+
+Decision
+
+Next.js
+
+Reason
+
+SSR and production-ready React framework
+
+---
+
+Decision
+
+PostgreSQL
+
+Reason
+
+Reliable relational database with JSON support
+
+---
+
+Decision
+
+Redis
+
+Reason
+
+Caching and background queues
+
+---
+
+Decision
+
+GitHub Actions
+
+Reason
+
+Native GitHub integration
+
+---
+
+Decision
+
+Docker
+
+Reason
+
+Consistent environments
+
+---
+
+Decision
+
+OpenAI
+
+Reason
+
+High-quality reasoning and summarization
+
+---
+
+Glossary
+
+AI Orchestrator
+
+Coordinates all AI modules
+
+Engineering Score
+
+Composite evaluation of developer practices
+
+Repository Intelligence
+
+Repository-level analysis engine
+
+Career Intelligence
+
+AI recommendation engine
+
+Skill Evidence
+
+Repository-backed proof for inferred skills
+
+Recruiter Intelligence
+
+Candidate evaluation system
+
+---
+
+Document Conclusion
+
+The Developer Intelligence Platform is designed as a modular, AI-first, cloud-native SaaS application that transforms GitHub repositories into actionable engineering intelligence. By combining repository analysis, AI reasoning, resume validation, and recruiter workflows, the platform delivers a comprehensive evaluation of developer capability rather than relying on superficial activity metrics.
+
+This TRD defines the engineering blueprint for implementation and establishes a scalable foundation for future expansion into enterprise hiring, educational platforms, and developer analytics.

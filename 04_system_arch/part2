@@ -1,0 +1,800 @@
+# 15. AI System Architecture
+
+## Vision
+
+The AI subsystem is designed as a collection of specialized agents coordinated by a central AI Orchestrator.
+
+Rather than sending all GitHub data to one prompt, each agent focuses on a specific task and produces structured outputs that are combined into a final Developer Intelligence Report.
+
+This approach improves:
+
+- Explainability
+- Accuracy
+- Maintainability
+- Scalability
+- Cost optimization
+
+---
+
+# 16. AI Multi-Agent Architecture
+
+                           User Request
+                                 │
+                                 ▼
+                     AI Orchestrator Service
+                                 │
+      ┌──────────────────────────┼──────────────────────────┐
+      │                          │                          │
+      ▼                          ▼                          ▼
+GitHub Analysis Agent     Skill Extraction Agent     Timeline Agent
+      │                          │                          │
+      ▼                          ▼                          ▼
+Repository Agent          Engineering Agent         Career Agent
+      │                          │                          │
+      └──────────────┬───────────┴───────────────┬──────────┘
+                     ▼                           ▼
+              README Agent              Recruiter Agent
+                     │
+                     ▼
+         Final Developer Intelligence Report
+
+---
+
+# 17. AI Agent Responsibilities
+
+## 17.1 GitHub Analysis Agent
+
+Purpose
+
+Collect and organize repository information.
+
+Input
+
+- Repository metadata
+- Languages
+- Topics
+- README
+- Commits
+- Releases
+
+Output
+
+Normalized GitHub Profile
+
+Responsibilities
+
+- Detect repositories
+- Identify technologies
+- Detect project type
+- Organize repository metadata
+
+---
+
+## 17.2 Repository Intelligence Agent
+
+Purpose
+
+Understand each repository.
+
+Questions answered
+
+- Is this a tutorial?
+- Is this original?
+- Is it production ready?
+- Is it abandoned?
+- Is it well documented?
+
+Output
+
+Repository Report
+
+Example
+
+Repository
+
+Hospital Management System
+
+Complexity
+
+Advanced
+
+Deployment
+
+Docker
+
+Authentication
+
+JWT
+
+Testing
+
+Partial
+
+Documentation
+
+Excellent
+
+Overall Quality
+
+9.1/10
+
+---
+
+## 17.3 Skill Extraction Agent
+
+Purpose
+
+Infer skills using evidence.
+
+Instead of
+
+React detected
+
+Generate
+
+Evidence
+
+React Router
+
+Context API
+
+Hooks
+
+State Management
+
+SSR
+
+Confidence
+
+95%
+
+Output
+
+Structured Skill Graph
+
+---
+
+## 17.4 Engineering Intelligence Agent
+
+Purpose
+
+Evaluate engineering maturity.
+
+Dimensions
+
+Architecture
+
+Backend
+
+Frontend
+
+Security
+
+Testing
+
+DevOps
+
+Documentation
+
+API Design
+
+Database Design
+
+Code Organization
+
+Outputs
+
+Engineering Profile
+
+---
+
+## 17.5 Learning Timeline Agent
+
+Purpose
+
+Reconstruct developer evolution.
+
+Input
+
+Repository dates
+
+Dependencies
+
+Commits
+
+Output
+
+2022
+
+HTML
+
+↓
+
+CSS
+
+↓
+
+JavaScript
+
+↓
+
+React
+
+↓
+
+Node
+
+↓
+
+Docker
+
+↓
+
+AI
+
+Instead of commit graphs.
+
+---
+
+## 17.6 Career Intelligence Agent
+
+Purpose
+
+Recommend future learning.
+
+Inputs
+
+Current skills
+
+Engineering score
+
+Market demand
+
+Career objective
+
+Outputs
+
+Missing Skills
+
+Learning Order
+
+Suggested Projects
+
+Estimated Learning Time
+
+Career Readiness
+
+---
+
+## 17.7 README Agent
+
+Purpose
+
+Generate professional GitHub profile README.
+
+Supports
+
+Resume Upload
+
+Questionnaire
+
+Existing README
+
+Portfolio Import
+
+Output
+
+Markdown
+
+Badges
+
+Cards
+
+Social Links
+
+Projects
+
+---
+
+## 17.8 Resume Validation Agent
+
+Purpose
+
+Compare
+
+Resume
+
+↓
+
+GitHub
+
+↓
+
+Evidence
+
+Questions
+
+Does resume match GitHub?
+
+Are claimed skills demonstrated?
+
+What projects support each skill?
+
+Output
+
+Resume Confidence Report
+
+---
+
+## 17.9 Recruiter Intelligence Agent
+
+Purpose
+
+Rank candidates.
+
+Inputs
+
+Resume
+
+GitHub
+
+Job Description
+
+Outputs
+
+Technical Match
+
+Engineering Score
+
+Interview Recommendation
+
+Risk Indicators
+
+Candidate Ranking
+
+---
+
+# 18. AI Orchestration Workflow
+
+The orchestrator controls execution order.
+
+Step 1
+
+Normalize GitHub data
+
+↓
+
+Step 2
+
+Extract repository metadata
+
+↓
+
+Step 3
+
+Generate repository reports
+
+↓
+
+Step 4
+
+Extract skills
+
+↓
+
+Step 5
+
+Generate engineering profile
+
+↓
+
+Step 6
+
+Build learning timeline
+
+↓
+
+Step 7
+
+Generate career roadmap
+
+↓
+
+Step 8
+
+Generate recruiter summary
+
+↓
+
+Step 9
+
+Merge results
+
+↓
+
+Step 10
+
+Store report
+
+---
+
+# 19. Repository Analysis Pipeline
+
+GitHub Repository
+
+↓
+
+Clone Metadata
+
+↓
+
+README Parser
+
+↓
+
+Framework Detection
+
+↓
+
+Dependency Detection
+
+↓
+
+Folder Structure Analysis
+
+↓
+
+Documentation Analysis
+
+↓
+
+Deployment Detection
+
+↓
+
+Testing Detection
+
+↓
+
+Architecture Detection
+
+↓
+
+Repository Intelligence Report
+
+---
+
+# 20. Feature Extraction Pipeline
+
+Repository
+
+↓
+
+package.json
+
+↓
+
+Requirements.txt
+
+↓
+
+Dockerfile
+
+↓
+
+GitHub Actions
+
+↓
+
+README
+
+↓
+
+Topics
+
+↓
+
+License
+
+↓
+
+Environment Files
+
+↓
+
+Feature Vector
+
+The Feature Vector is then passed to the AI agents instead of raw repository data.
+
+---
+
+# 21. Engineering Evaluation Workflow
+
+Feature Vector
+
+↓
+
+Architecture Analysis
+
+↓
+
+Security Analysis
+
+↓
+
+Testing Analysis
+
+↓
+
+Deployment Analysis
+
+↓
+
+Documentation Analysis
+
+↓
+
+Code Organization
+
+↓
+
+Engineering Score
+
+---
+
+# 22. Career Recommendation Workflow
+
+Engineering Score
+
++
+
+Detected Skills
+
++
+
+Missing Skills
+
++
+
+Market Trends
+
+↓
+
+Career Agent
+
+↓
+
+Learning Roadmap
+
+↓
+
+Suggested Technologies
+
+↓
+
+Recommended Projects
+
+↓
+
+Final Career Plan
+
+---
+
+# 23. README Generation Pipeline
+
+Resume
+
++
+
+GitHub
+
++
+
+Projects
+
+↓
+
+README Agent
+
+↓
+
+Template Selection
+
+↓
+
+Content Generation
+
+↓
+
+Markdown Validation
+
+↓
+
+Preview
+
+↓
+
+Download
+
+---
+
+# 24. Resume Validation Pipeline
+
+Resume Upload
+
+↓
+
+PDF Parser
+
+↓
+
+Skill Extraction
+
+↓
+
+GitHub Skill Extraction
+
+↓
+
+Comparison Engine
+
+↓
+
+Evidence Mapping
+
+↓
+
+Confidence Calculation
+
+↓
+
+Validation Report
+
+---
+
+# 25. Recruiter Pipeline
+
+Recruiter Uploads
+
+CSV
+
+↓
+
+Resume Parser
+
+↓
+
+GitHub Analysis
+
+↓
+
+Engineering Analysis
+
+↓
+
+Ranking Engine
+
+↓
+
+Filtering
+
+↓
+
+Interview Suggestions
+
+↓
+
+Export Report
+
+---
+
+# 26. Event-Driven Processing
+
+User submits GitHub URL
+
+↓
+
+Job Created
+
+↓
+
+Redis Queue
+
+↓
+
+Worker
+
+↓
+
+AI Analysis
+
+↓
+
+Database Update
+
+↓
+
+Notification
+
+↓
+
+Dashboard Refresh
+
+Heavy AI processing never blocks user requests.
+
+---
+
+# 27. Sequence Diagram — GitHub Analysis
+
+User
+
+↓
+
+Frontend
+
+↓
+
+Backend API
+
+↓
+
+GitHub Service
+
+↓
+
+Queue
+
+↓
+
+Worker
+
+↓
+
+AI Orchestrator
+
+↓
+
+AI Agents
+
+↓
+
+Database
+
+↓
+
+Frontend
+
+↓
+
+Developer Report
+
+---
+
+# 28. Design Principles
+
+Every AI output must:
+
+- Be evidence-backed
+- Include confidence scores
+- Avoid unsupported claims
+- Explain reasoning
+- Be reproducible
+
+No agent should make assumptions without repository evidence.
+
+---
+
+# 29. Future AI Evolution
+
+Future versions may include:
+
+- Code Quality Agent
+- System Design Agent
+- Open Source Contribution Agent
+- AI Interview Agent
+- Team Compatibility Agent
+- Engineering Benchmark Agent
+- Developer Personality Insights (based only on observable collaboration patterns, with clear limitations)
+- Enterprise Hiring Agent
+
+The architecture is intentionally modular so new agents can be added without affecting existing components.

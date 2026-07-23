@@ -1,0 +1,805 @@
+# docs/04_Architecture_Design_Document.md
+
+# Part 3 — Data, Infrastructure & Deployment Architecture
+
+Version: 1.0
+
+---
+
+# 30. C4 Level 3 — Component Diagram
+
+                        FastAPI Backend
+┌────────────────────────────────────────────────────────────┐
+│                    API Controller Layer                    │
+├────────────────────────────────────────────────────────────┤
+│ Authentication Controller                                 │
+│ GitHub Controller                                         │
+│ Analysis Controller                                       │
+│ Resume Controller                                         │
+│ Recruiter Controller                                      │
+│ README Controller                                         │
+└────────────────────────────────────────────────────────────┘
+                            │
+                            ▼
+┌────────────────────────────────────────────────────────────┐
+│                    Service Layer                           │
+├────────────────────────────────────────────────────────────┤
+│ Auth Service                                               │
+│ GitHub Service                                             │
+│ Repository Service                                         │
+│ Analysis Service                                           │
+│ Resume Service                                             │
+│ Recruiter Service                                          │
+│ README Service                                             │
+└────────────────────────────────────────────────────────────┘
+                            │
+                            ▼
+┌────────────────────────────────────────────────────────────┐
+│                AI Orchestrator Layer                       │
+├────────────────────────────────────────────────────────────┤
+│ Repository Agent                                           │
+│ Skill Agent                                                │
+│ Engineering Agent                                          │
+│ Career Agent                                               │
+│ README Agent                                               │
+│ Resume Agent                                               │
+│ Recruiter Agent                                            │
+└────────────────────────────────────────────────────────────┘
+                            │
+                            ▼
+┌────────────────────────────────────────────────────────────┐
+│ Repository Layer                                           │
+├────────────────────────────────────────────────────────────┤
+│ PostgreSQL                                                 │
+│ Redis                                                      │
+│ Object Storage                                             │
+└────────────────────────────────────────────────────────────┘
+
+---
+
+# 31. Database Architecture
+
+## Primary Database
+
+Technology
+
+PostgreSQL
+
+Reason
+
+ACID compliance
+
+Strong indexing
+
+JSON support
+
+Scalable
+
+Reliable
+
+---
+
+## Tables
+
+Users
+
+↓
+
+GitHub Profiles
+
+↓
+
+Repositories
+
+↓
+
+Repository Reports
+
+↓
+
+Engineering Reports
+
+↓
+
+Career Reports
+
+↓
+
+README Reports
+
+↓
+
+Resume Reports
+
+↓
+
+Recruiter Reports
+
+---
+
+# Entity Relationship Diagram
+
+User
+ │
+ ├──────── GitHubProfile
+ │              │
+ │              ├──────── Repository
+ │              │             │
+ │              │             ├──── RepositoryAnalysis
+ │              │             ├──── SkillEvidence
+ │              │             └──── Metrics
+ │              │
+ │              └──────── CareerReport
+ │
+ ├──────── Resume
+ │              │
+ │              └──── ValidationReport
+ │
+ └──────── RecruiterWorkspace
+                 │
+                 └──── CandidateRanking
+
+---
+
+# 32. Data Lifecycle
+
+GitHub Username
+
+↓
+
+Fetch
+
+↓
+
+Normalize
+
+↓
+
+Feature Extraction
+
+↓
+
+Analysis
+
+↓
+
+Storage
+
+↓
+
+Dashboard
+
+↓
+
+Re-analysis Trigger
+
+↓
+
+Updated Report
+
+---
+
+# 33. Repository Intelligence Flow
+
+Repository
+
+↓
+
+Metadata Parser
+
+↓
+
+Dependency Scanner
+
+↓
+
+README Parser
+
+↓
+
+CI/CD Detector
+
+↓
+
+Docker Detector
+
+↓
+
+Deployment Detector
+
+↓
+
+Architecture Detector
+
+↓
+
+Testing Detector
+
+↓
+
+Repository Intelligence JSON
+
+---
+
+# Example Intelligence JSON
+
+{
+  "repository": "dev-portfolio",
+  "complexity": "Advanced",
+  "deployment": true,
+  "docker": true,
+  "testing": false,
+  "architecture": "Layered",
+  "documentation": 8.9,
+  "security": 7.6
+}
+
+---
+
+# 34. AI Knowledge Flow
+
+GitHub
+
+↓
+
+Raw Metadata
+
+↓
+
+Normalizer
+
+↓
+
+Feature Extractor
+
+↓
+
+Rules Engine
+
+↓
+
+AI Orchestrator
+
+↓
+
+Specialized Agents
+
+↓
+
+Developer Intelligence Report
+
+↓
+
+Dashboard
+
+---
+
+# 35. Rules Engine
+
+Not every task requires AI.
+
+The Rules Engine performs deterministic analysis.
+
+Examples
+
+Detect React
+
+Detect Docker
+
+Detect GitHub Actions
+
+Detect Kubernetes
+
+Detect PostgreSQL
+
+Detect Authentication
+
+Detect Testing Frameworks
+
+Detect Package Managers
+
+Detect Environment Files
+
+Detect CI/CD
+
+Only the interpreted findings are passed to the LLM.
+
+Benefits
+
+Lower cost
+
+Higher accuracy
+
+Deterministic outputs
+
+Reduced hallucination
+
+---
+
+# 36. Analytics Engine
+
+The Analytics Engine computes measurable statistics.
+
+Examples
+
+Repository Growth
+
+Technology Adoption
+
+Repository Health
+
+Commit Consistency
+
+Documentation Coverage
+
+Technology Diversity
+
+Deployment Ratio
+
+Testing Ratio
+
+Project Complexity Distribution
+
+Average Repository Age
+
+These metrics are displayed directly without AI inference.
+
+---
+
+# 37. Security Architecture
+
+Browser
+
+↓
+
+HTTPS
+
+↓
+
+Cloudflare WAF
+
+↓
+
+API Gateway
+
+↓
+
+JWT Validation
+
+↓
+
+RBAC Authorization
+
+↓
+
+Business Logic
+
+↓
+
+Database
+
+---
+
+Security Layers
+
+Layer 1
+
+HTTPS
+
+Layer 2
+
+OAuth
+
+Layer 3
+
+JWT
+
+Layer 4
+
+RBAC
+
+Layer 5
+
+Input Validation
+
+Layer 6
+
+Rate Limiting
+
+Layer 7
+
+Audit Logging
+
+---
+
+# Security Controls
+
+OAuth Authentication
+
+JWT Tokens
+
+Password Hashing (future)
+
+CSRF Protection
+
+XSS Prevention
+
+SQL Injection Protection
+
+CORS Policies
+
+Secrets Management
+
+Audit Trails
+
+Encrypted Storage
+
+---
+
+# 38. Deployment Topology
+
+                     Internet
+                          │
+                Cloudflare CDN
+                          │
+                  Vercel Frontend
+                          │
+                     FastAPI API
+                          │
+        ┌─────────────────┼─────────────────┐
+        ▼                 ▼                 ▼
+ PostgreSQL          Redis Cache       Celery Workers
+        │                                   │
+        └──────────────────┬────────────────┘
+                           ▼
+                      OpenAI API
+
+---
+
+# 39. Scalability Strategy
+
+Phase 1
+
+Monolith
+
+↓
+
+Phase 2
+
+Separate Workers
+
+↓
+
+Phase 3
+
+Service-Oriented
+
+↓
+
+Phase 4
+
+Microservices
+
+↓
+
+Phase 5
+
+AI Agent Platform
+
+Each phase minimizes migration effort.
+
+---
+
+# Horizontal Scaling
+
+Frontend
+
+Auto Scaling
+
+Backend
+
+Multiple Instances
+
+Workers
+
+Unlimited Instances
+
+Redis
+
+Managed Cluster
+
+Database
+
+Read Replicas
+
+Storage
+
+CDN
+
+---
+
+# 40. Fault Tolerance
+
+If GitHub fails
+
+↓
+
+Retry
+
+↓
+
+Cached Profile
+
+↓
+
+Notify User
+
+---
+
+If AI fails
+
+↓
+
+Retry
+
+↓
+
+Fallback Prompt
+
+↓
+
+Partial Report
+
+---
+
+If Worker Fails
+
+↓
+
+Replay Queue
+
+↓
+
+Continue Processing
+
+---
+
+If Database Fails
+
+↓
+
+Read Replica
+
+↓
+
+Recovery
+
+---
+
+# 41. Monitoring Architecture
+
+Application
+
+↓
+
+OpenTelemetry
+
+↓
+
+Prometheus
+
+↓
+
+Grafana
+
+↓
+
+Alerts
+
+↓
+
+Email
+
+↓
+
+Slack
+
+↓
+
+PagerDuty
+
+---
+
+Metrics
+
+API Latency
+
+Database Latency
+
+Queue Length
+
+Worker Health
+
+OpenAI Cost
+
+GitHub Errors
+
+Cache Hit Rate
+
+CPU
+
+RAM
+
+---
+
+# 42. Disaster Recovery
+
+Database Backup
+
+Daily
+
+Retention
+
+30 Days
+
+---
+
+Redis
+
+Rebuild Automatically
+
+---
+
+Storage
+
+Versioned Backups
+
+---
+
+Infrastructure
+
+Infrastructure as Code
+
+---
+
+Recovery Objective
+
+RTO
+
+30 Minutes
+
+RPO
+
+15 Minutes
+
+---
+
+# 43. Engineering Decision Records (EDRs)
+
+Decision 001
+
+Use FastAPI
+
+Reason
+
+Excellent async support and Python AI ecosystem.
+
+---
+
+Decision 002
+
+Use Next.js
+
+Reason
+
+SSR, routing, and performance.
+
+---
+
+Decision 003
+
+Use PostgreSQL
+
+Reason
+
+Relational consistency with JSON flexibility.
+
+---
+
+Decision 004
+
+Use Redis
+
+Reason
+
+Caching, queues, sessions.
+
+---
+
+Decision 005
+
+Use Celery
+
+Reason
+
+Reliable background processing.
+
+---
+
+Decision 006
+
+Use Docker
+
+Reason
+
+Environment consistency.
+
+---
+
+Decision 007
+
+Use GitHub Actions
+
+Reason
+
+Integrated CI/CD.
+
+---
+
+Decision 008
+
+Use OpenAI
+
+Reason
+
+High-quality reasoning and structured generation.
+
+---
+
+# 44. Future Architecture Evolution
+
+Version 2
+
+Vector Database
+
+Semantic Repository Search
+
+Repository Embeddings
+
+RAG Pipeline
+
+---
+
+Version 3
+
+Autonomous AI Agents
+
+Continuous Portfolio Monitoring
+
+Developer Skill Graph
+
+Organization Analytics
+
+---
+
+Version 4
+
+Enterprise Hiring Platform
+
+Internal Engineering Assessment
+
+ATS Integration
+
+Coding Challenge Evaluation
+
+Interview Recommendation Engine
+
+---
+
+# 45. Final Architecture Summary
+
+The Developer Intelligence Platform is built as a cloud-native, AI-assisted system with a modular architecture.
+
+The architecture separates deterministic analysis (Rules Engine and Analytics Engine) from AI reasoning (Multi-Agent AI Layer), ensuring that recommendations are evidence-based, scalable, and explainable.
+
+This design supports future expansion into enterprise recruitment, developer analytics, portfolio optimization, and AI-assisted engineering assessment without major architectural changes.

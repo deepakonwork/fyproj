@@ -1,0 +1,610 @@
+12. AI Intelligence Layer
+12.1 Overview
+
+The AI Intelligence Layer is the core differentiator of the platform. Unlike traditional GitHub analyzers that aggregate metrics, this layer transforms raw GitHub data into evidence-backed engineering insights.
+
+Design Principles
+AI should infer, not hallucinate.
+Every insight should reference observable GitHub evidence.
+Recommendations should be actionable.
+AI outputs should be deterministic where possible.
+Expensive analyses should be cached.
+12.2 AI Architecture
+                    Raw GitHub Data
+                           │
+                           ▼
+                 Data Normalization Layer
+                           │
+                           ▼
+                  Feature Extraction Engine
+                           │
+          ┌────────────────┼────────────────┐
+          ▼                ▼                ▼
+ Repository Engine   Skill Engine    Timeline Engine
+          │                │                │
+          └────────────┬───┴───────────────┘
+                       ▼
+               AI Orchestrator Service
+                       │
+      ┌────────────────┼──────────────────┐
+      ▼                ▼                  ▼
+ Career AI      README AI        Recruiter AI
+                       │
+                       ▼
+               Final Intelligence Report
+13. AI Orchestrator
+Purpose
+
+The AI Orchestrator coordinates all AI modules and determines:
+
+Which analyses are required
+Execution order
+Parallel processing opportunities
+Prompt selection
+Result aggregation
+Cost optimization
+
+The orchestrator never analyzes data itself. It delegates work to specialized engines.
+
+Responsibilities
+Receive analysis request
+Validate input
+Check cache
+Queue background jobs
+Call AI services
+Merge outputs
+Store results
+Return final report
+Processing Flow
+User Request
+      │
+      ▼
+Profile Retrieved
+      │
+      ▼
+Normalize Data
+      │
+      ▼
+Feature Extraction
+      │
+      ▼
+Parallel AI Modules
+      │
+      ▼
+Merge Results
+      │
+      ▼
+Generate Report
+      │
+      ▼
+Persist Results
+14. Feature Extraction Engine
+
+Before AI is invoked, raw repository data is converted into structured features.
+
+Extracted Features
+Repository Features
+Repository count
+Active repositories
+Archived repositories
+Forks
+Stars
+Releases
+License
+Visibility
+Topics
+Documentation Features
+README presence
+README length
+Images
+GIFs
+Installation guide
+API documentation
+Architecture diagrams
+Contribution guide
+License section
+Development Features
+Branching strategy
+Commit frequency
+Commit message quality
+Release cadence
+Issue usage
+Pull request activity
+Tags
+Milestones
+Codebase Features
+
+Without performing static code analysis, detect:
+
+Frameworks
+Libraries
+Package managers
+Docker
+CI/CD
+Environment variables
+Testing frameworks
+Build tools
+Infrastructure Features
+
+Detect:
+
+Dockerfile
+docker-compose
+GitHub Actions
+Kubernetes
+Terraform
+AWS configs
+Azure configs
+GCP configs
+15. Repository Intelligence Engine
+Purpose
+
+Determine what each repository represents.
+
+The objective is not code review.
+
+The objective is understanding engineering effort.
+
+Repository Classification
+
+Each repository is classified.
+
+Example categories:
+
+Tutorial
+Clone
+Personal Project
+Academic Project
+Production Project
+Open Source
+Library
+API
+CLI Tool
+Research Project
+Repository Complexity
+
+Complexity Score
+
+Based on:
+
+Folder structure
+Dependency graph
+Number of services
+Configuration
+Deployment
+Authentication
+Database usage
+API integrations
+
+Example:
+
+Complexity Score
+
+Simple
+
+Medium
+
+Advanced
+
+Enterprise
+Repository Quality Metrics
+
+The engine evaluates:
+
+Documentation
+README quality
+Screenshots
+API docs
+Architecture docs
+Engineering
+Config management
+Secrets handling
+Environment variables
+Modular structure
+Naming consistency
+Deployment
+
+Detect:
+
+Docker
+CI/CD
+Cloud deployment
+Production configs
+Testing
+
+Detect:
+
+Jest
+Pytest
+Cypress
+Playwright
+Vitest
+JUnit
+
+Generate coverage estimate (heuristic).
+
+16. Engineering Intelligence Engine
+
+This engine evaluates the developer, not repositories.
+
+Engineering Dimensions
+Architecture
+
+Can the developer design software?
+
+Signals:
+
+Modular folders
+Layered architecture
+Dependency management
+Backend
+
+Signals:
+
+REST APIs
+Authentication
+Databases
+ORM
+Validation
+Middleware
+Frontend
+
+Signals:
+
+State management
+Routing
+Forms
+Component organization
+Accessibility
+DevOps
+
+Signals:
+
+Docker
+GitHub Actions
+Deployment
+Infrastructure
+Security
+
+Signals:
+
+JWT
+OAuth
+Input validation
+HTTPS
+Secrets management
+Collaboration
+
+Signals:
+
+Pull Requests
+Issues
+Discussions
+Contributors
+Organizations
+Output Example
+Architecture
+
+★★★★☆
+
+Backend
+
+★★★★★
+
+Frontend
+
+★★★★☆
+
+DevOps
+
+★★☆☆☆
+
+Security
+
+★★★☆☆
+
+Documentation
+
+★★★★☆
+
+Testing
+
+★☆☆☆☆
+17. Skill Intelligence Engine
+Objective
+
+Infer skills from evidence instead of keywords.
+
+Evidence Sources
+Dependencies
+Folder structure
+Configuration
+APIs
+Documentation
+Deployments
+
+Example
+
+Instead of:
+
+React detected
+
+Generate
+
+Evidence:
+
+React Router
+
+Context API
+
+Custom Hooks
+
+State Management
+
+Component Composition
+
+Confidence: High
+Skill Confidence
+
+Each skill has:
+
+Skill
+
+Confidence
+
+Evidence
+
+Repository Count
+
+Last Used
+
+Example
+
+Node.js
+
+Confidence
+
+92%
+
+Evidence
+
+12 repositories
+
+Authentication
+
+REST APIs
+
+Express
+
+JWT
+18. Learning Timeline Engine
+Purpose
+
+Reconstruct developer growth.
+
+Instead of commit graphs:
+
+2022
+
+HTML
+
+↓
+
+CSS
+
+↓
+
+JavaScript
+
+↓
+
+React
+
+↓
+
+Next.js
+
+↓
+
+Node
+
+↓
+
+Docker
+
+↓
+
+AI
+
+2026
+Timeline Inputs
+Repository creation
+Framework adoption
+Commit history
+Dependency evolution
+Timeline Output
+First language
+First framework
+Backend adoption
+Cloud adoption
+DevOps adoption
+AI adoption
+19. Career Intelligence Engine
+Goal
+
+Recommend future learning based on:
+
+Current skills
+
+Repository evidence
+
+Market demand
+
+Inputs
+Skills
+Repository quality
+Market trends
+Career goal
+Outputs
+Missing skills
+Suggested projects
+Learning roadmap
+Estimated learning effort
+Career readiness
+
+Example
+
+Target
+
+Senior Backend Engineer
+
+Missing
+
+Docker
+
+Redis
+
+Kafka
+
+Kubernetes
+
+CI/CD
+
+System Design
+20. README Intelligence Engine
+Purpose
+
+Generate recruiter-friendly GitHub README files.
+
+Inputs
+Resume
+GitHub Profile
+Existing README
+Questionnaire
+Sections Generated
+Hero Banner
+Introduction
+Skills
+Featured Projects
+GitHub Stats
+Contribution Graph
+Experience
+Certifications
+Contact
+Social Links
+Themes
+Modern
+Minimal
+Professional
+Hacker
+Corporate
+Dark Mode
+21. Resume Intelligence Engine
+Responsibilities
+
+Parse:
+
+PDF
+DOCX
+
+Extract:
+
+Skills
+Education
+Experience
+Certifications
+Projects
+Validation
+
+Compare:
+
+Resume
+
+↓
+
+GitHub
+
+↓
+
+Repository Evidence
+
+↓
+
+Confidence Report
+
+Example
+
+Resume claims
+
+AWS
+
+Evidence
+
+None
+
+Confidence
+
+Low
+22. Recruiter Intelligence Engine
+Purpose
+
+Help HR evaluate candidates faster.
+
+Inputs
+CSV
+Resume
+GitHub
+Job Description
+Outputs
+Candidate Ranking
+Skill Match
+Portfolio Quality
+Engineering Score
+Interview Readiness
+Risk Factors
+Recruiter Dashboard
+
+Supports:
+
+Smart Filters
+Search
+Export
+AI Summary
+Candidate Comparison
+23. AI Prompt Strategy
+
+To improve consistency, prompts are modular.
+
+Each AI engine uses:
+
+System Prompt
+Task Prompt
+Evidence Payload
+Output Schema
+
+Outputs are required in structured JSON before rendering.
+
+24. AI Safety & Reliability
+
+The platform must:
+
+Never fabricate skills.
+Cite repository evidence for conclusions.
+Mark uncertain inferences with confidence levels.
+Avoid making claims about a developer that cannot be supported by GitHub data.
+Allow users to regenerate reports after profile updates.
+End of Part 2
+
+Part 3 will cover:
+
+REST API Specification
+Database Schema
+PostgreSQL Design
+Redis Strategy
+Queue Processing
+Background Workers
+Security Architecture
+Rate Limiting
+Logging & Monitoring
+Error Handling
+Performance Optimization
